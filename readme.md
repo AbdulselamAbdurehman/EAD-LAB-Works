@@ -63,3 +63,11 @@ src
 ## 📄 License
 
 This project is licensed under the **MIT License**.
+
+## Members
+
+| Name                    | ID            |
+| ----------------------- | ------------- |
+| `Abdulselam Abdurehman` | `UGR/2455/14` |
+| `Jemil Shikuri`         | `UGR/4296/14` |
+| `Abdulmejd Kelil`       | `UGR/3326/14` |

@@ -48,8 +48,7 @@ src
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/quiz-app-spring.git
-   cd quiz-app-spring
+   https://github.com/AbdulselamAbdurehman/EAD-LAB-Works.git
    ```
 2. Build the project:
    ```bash

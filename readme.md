@@ -1,6 +1,6 @@
-# 📚 Quiz App – Spring Framework (Java)
+# 📚 QuizLet – Spring Framework (Java)
 
-**Quiz App** is a dynamic and interactive web application built using the **Spring Framework** (Spring Boot) to manage and conduct quizzes efficiently. The app allows users to take quizzes, view their scores, and manage questions and answers through a user-friendly interface.
+**QuizLet** is a dynamic and interactive web application built using the **Spring Framework** (Spring Boot) to manage and conduct quizzes efficiently. The app allows users to take quizzes, view their scores, and manage questions and answers through a user-friendly interface.
 
 The project is built with **Spring Boot** for backend development, offering a scalable, secure, and maintainable solution for quiz-based applications. It integrates modern Java development practices with robust database management to provide a seamless experience for both students and instructors.
 

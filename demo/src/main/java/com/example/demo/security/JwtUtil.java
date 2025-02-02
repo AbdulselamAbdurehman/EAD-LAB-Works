@@ -11,12 +11,10 @@ import java.util.function.Function;
 @Component
 public class JwtUtil {
 
-    // Directly define the JWT secret key here (instead of using app.properties)
-    private static final String JWT_SECRET = "NzI1ZDJkNjAtNzJlNC00ZDIxLTkyZGUtMjk2YmE4N2M1MzY4"; // Your secret key
+    private static final String JWT_SECRET = "NzI1ZDJkNjAtNzJlNC00ZDIxLTkyZGUtMjk2YmE4N2M1MzY4";
 
     private static final long EXPIRATION_MS = 86400000L; // Expiration time in milliseconds
 
-    // Convert the secret from String to byte array and use it for signing
     private Key getSigningKey() {
         byte[] secretKeyBytes = JWT_SECRET.getBytes(); // Convert the secret string to a byte array
         return Keys.hmacShaKeyFor(secretKeyBytes); // Use the byte array to create the signing key

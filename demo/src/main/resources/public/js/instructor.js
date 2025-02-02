@@ -38,7 +38,7 @@ function renderQuiz() {
       .map((question) => {
         const description = question.description;
         const options = question.options;
-        const questionNum = question.questionNumber;
+        const questionNum = question.id;
         const explanation = question.explanation;
         index++;
 
@@ -54,14 +54,14 @@ function renderQuiz() {
                     </button>
                 </span>
           </legend>
-          <input required id="${questionNum}1" type="radio" value="1" name="question${questionNum}" class="mx-8">
-          <label for="${questionNum}1">${options[0]}</label><br>
-          <input id="${questionNum}2" type="radio" value="2" name="question${questionNum}" class="mx-8">
-          <label for="${questionNum}2">${options[1]}</label><br>
-          <input id="${questionNum}3" type="radio" value="3" name="question${questionNum}" class="mx-8">
-          <label for="${questionNum}3">${options[2]}</label><br>
-          <input id="${questionNum}4" type="radio" value="4" name="question${questionNum}" class="mx-8">
-          <label for="${questionNum}4">${options[3]}</label><br>
+          <input id="${questionNum}-1" type="radio" value="1" name="question-${questionNum}" required class="mx-8">
+          <label for="${questionNum}-1">${options[0]}</label><br>
+          <input id="${questionNum}-2" type="radio" value="2" name="question-${questionNum}" class="mx-8">
+          <label for="${questionNum}-2">${options[1]}</label><br>
+          <input id="${questionNum}-3" type="radio" value="3" name="question-${questionNum}" class="mx-8">
+          <label for="${questionNum}-3">${options[2]}</label><br>
+          <input id="${questionNum}-4" type="radio" value="4" name="question-${questionNum}" class="mx-8">
+          <label for="${questionNum}-4">${options[3]}</label><br>
           <div class="explanation hidden mt-2">
               <h3 class="text-lg font-semibold mb-1 text-gray-800">Explanation</h3>
               <p class="text-sm text-gray-700">${explanation}</p>
@@ -76,10 +76,10 @@ function renderQuiz() {
   }
   for (let i = 1; i <= questionList.length; i++) {
     const deleteButton = document.querySelector(
-      `#delete-btn-${questionList[i - 1].questionNumber}`
+      `#delete-btn-${questionList[i - 1].id}`
     );
     const editButton = document.querySelector(
-      `#edit-btn-${questionList[i - 1].questionNumber}`
+      `#edit-btn-${questionList[i - 1].id}`
     );
 
     deleteButton.addEventListener("click", () => {
@@ -96,9 +96,12 @@ submitAnswer.addEventListener("click", (event) => {
   event.preventDefault();
 
   const userAnswers = [];
-  for (let i = 1; i <= questionList.length; i++) {
-    const answer = document.querySelector(`input[name="question${i}"]:checked`);
+  for (let i = 0; i < questionList.length; i++) {
+    const answer = document.querySelector(
+      `input[name="question-${questionList[i].id}"]:checked`
+    );
     if (!answer) {
+      alert(`Please answer question ${i + 1}`);
       console.log(`Please answer question ${i}`);
       return;
     }
@@ -130,7 +133,7 @@ logOutButton.addEventListener("click", () => {
 
 async function deleteQuestion(question) {
   try {
-    let questionNum = question.questionNumber;
+    let questionNum = question.id;
     const endpoint = `http://localhost:8080/api/questions/${questionNum}`;
     const token = localStorage.getItem("token");
     const response = await fetch(endpoint, {
@@ -161,7 +164,7 @@ function editQuestion(question) {
   console.log("editQuestion called!");
   // Get the question container where the question content is displayed
   const questionContainer = document.getElementById(
-    `question-num-${question.questionNumber}`
+    `question-num-${question.id}`
   );
   console.log(questionContainer);
   // return null;
@@ -183,7 +186,7 @@ function editQuestion(question) {
 
   // Add event listener for the Save button
   document.getElementById("save-edit").addEventListener("click", () => {
-    saveQuestionEdits(question.questionNumber);
+    saveQuestionEdits(question.id);
   });
 
   // Add event listener for the Cancel button to reload the page and show original content

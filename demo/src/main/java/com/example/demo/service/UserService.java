@@ -1,21 +1,34 @@
 package com.example.demo.service;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.model.Role;
 import com.example.demo.model.User;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.security.JwtUtil;
 
+import java.util.Map;
 import java.util.Optional;
 
 @Service
 public class UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
+    private final JwtUtil jwtUtil;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder,
+            AuthenticationManager authenticationManager, JwtUtil jwtUtil) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
     }
 
     public User registerUser(User user) {
@@ -47,4 +60,33 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("User not found"));
         userRepository.delete(user);
     }
+
+    public Optional<User> findByEmail(String userId) {
+        return Optional.ofNullable(userRepository.findByEmail(userId));
+
+    }
+
+    public ResponseEntity<Map<String, Object>> login(String userId, String password, Role role) {
+        Optional<User> user = findByUsername(userId);
+        if (user.isEmpty()) {
+            user = findByEmail(userId);
+        }
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("status", "error", "message", "User not found"));
+        }
+
+        if (user.get().getRole().name() != role.name()) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(Map.of("status", "error", "message", "Role mismatch"));
+
+        }
+
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(user.get().getUsername(), password));
+
+        String token = jwtUtil.generateToken(user.get().getUsername());
+        return ResponseEntity.ok(Map.of("status", "success", "token", token, "role", user.get().getRole()));
+    }
+
 }

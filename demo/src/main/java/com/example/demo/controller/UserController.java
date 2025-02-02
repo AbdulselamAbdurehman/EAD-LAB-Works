@@ -23,6 +23,7 @@ public class UserController {
 
     @PostMapping("/signup")
     public User register(@Valid @RequestBody SignupDto signupDto) {
+        System.out.println("Hit /signup");
         User user = new User();
         user.setUsername(signupDto.getUsername());
         user.setRole(signupDto.getRole());
